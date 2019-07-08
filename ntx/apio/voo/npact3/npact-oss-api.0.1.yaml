@@ -1,0 +1,339 @@
+openapi: 3.0.1
+info:
+  title: NPACT vs ZSMART
+  description: 'This is the interface definition exposed by NPACT (portibility platform) to OSS/BSS platform'
+  contact:
+    email: support@netaxis.be
+  version: 0.1.0
+externalDocs:
+  description: Find out more about Netaxis products
+  url: https://www.netaxis.be
+servers:
+- url: https://10.11.10.136/api/v1/oss
+tags:
+- name: port-in
+  description: Interactions about PORT-IN requests
+- name: port-out
+  description: Interactions about PORT-OUT requests
+- name: return-in
+  description: Interactions about ranges returning in requests
+- name: return-out
+  description: Interactions about ranges returning out requests
+paths:
+  /fnprequest:
+    post:
+      tags:
+      - port-in
+      summary: Starts a new port-in request
+      operationId: newPortIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipientid:
+                  description: unique operator identification of the Recipient
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                donorid:
+                  description: unique operator identification of the Donor
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                npduedate:
+                  description: estimated date of porting execution
+                  type: string
+                  format: date-time
+                complexityclass:
+                  description: complexity class S(imple) or C(omplex)
+                  type: string
+                  enum:
+                    - 'S'
+                    - 'C'
+                routinginfo:
+                  description: routing info
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                vat:
+                  description: entreprise number of the customer
+                  type: string
+                accountnumber:
+                  description: customer account number as known at the donor participant
+                  type: string
+                zipcode:
+                  description: zip code of the customer
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                housenumber:
+                  description: house number of the customer
+                  type: string
+                street:
+                  description: street of the customer
+                  type: string
+                ranges:
+                  description: number ranges requested to be ported
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      numberfrom:
+                        description: start of the range
+                        type: string
+                      numberto:
+                        description: end of the range (use numberfrom if missing)
+                        type: string
+                      codedid:
+                        description: used to flag specific conditions impacting the porting process
+                        type: string
+                    required:
+                      - numberfrom
+                    additionalProperties: false
+                customertype:
+                  description: customer type R(esidential) or B(usiness)
+                  type: string
+                  enum:
+                    - R
+                    - B
+                customerid:
+                  type: string
+                  description: VOO internal customer reference
+                orderid:
+                  type: string
+                  description: ZSmart product order id
+              required:
+                - recipientid
+                - donorid
+                - routinginfo
+                - complexityclass
+                - ranges
+                - customertype
+                - orderid
+              additionalProperties: false
+        required: true
+      responses:
+        400:
+          description: Invalid field(s) supplied
+        200:
+          description: Portability order placed succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: workflow instance id started at NPACT.
+      security:
+      - BearerAuth: []
+  /{orderid}/fnpexec:
+    post:
+      tags:
+      - port-in
+      summary: Trigger FNPExec for Port-IN
+      operationId: triggerFNPExec
+      parameters:
+      - name: orderid
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'the product order id sent on /fnprequest call (though for the migration: accept the CRDC porting id or acbis porting id as well?)'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid fields
+      security:
+      - BearerAuth: []
+  /{orderid}/fnprfs:
+    post:
+      tags:
+      - port-in
+      summary: Trigger FNPRfs for Port-IN
+      operationId: triggerFNPRfs
+      parameters:
+      - name: orderid
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'the product order id sent on /fnprequest call'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid fields
+      security:
+      - BearerAuth: []
+  /{orderid}/fnpabortactivated:
+    post:
+      tags:
+      - port-in
+      summary: Trigger FNPAbortActivated for Port-IN
+      operationId: triggerAbortActivated
+      parameters:
+      - name: orderid
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'the product order id sent on /fnprequest call'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid fields
+      security:
+      - BearerAuth: []
+  /{orderid}/fnpready:
+    post:
+      tags:
+      - port-out
+      summary: Mark readiness for Porting OUT
+      operationId: markReady
+      parameters:
+      - name: orderid
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'the product order id received on original /fnprequest call'
+      responses:
+        200:
+          description: successful operation
+      security:
+      - BearerAuth: []
+  /{orderid}/fnpactivated:
+    post:
+      tags:
+      - port-out
+      summary: Confirm activation of the requested ranges
+      operationId: rangesActivated
+      parameters:
+      - name: orderid
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'the product order id received on original /fnprequest call'
+      responses:
+        200:
+          description: successful operation
+      security:
+      - BearerAuth: []
+  /{orderid}/fnpdiscdone:
+    post:
+      tags:
+      - return-in
+      summary: Signal the Return IN is complete
+      operationId: disconnectDone
+      parameters:
+      - name: orderid
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'the product order id received on original /fnpdisconnect call'
+      responses:
+        200:
+          description: successful operation
+      security:
+      - BearerAuth: []
+  /fnpdisconnect:
+    post:
+      tags:
+      - return-out
+      summary: Starts a new Return OUT workflow
+      operationId: newDisconnect
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipientid:
+                  description: unique operator identification of the Recipient
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                donorid:
+                  description: unique operator identification of the Donor
+                  type: string
+                  minLength: 4
+                  maxLength: 4
+                complexityclass:
+                  description: complexity class S(imple) or C(omplex)
+                  type: string
+                  enum:
+                    - 'S'
+                    - 'C'
+                ranges:
+                  description: number ranges requested to be ported
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      numberfrom:
+                        description: start of the range
+                        type: string
+                      numberto:
+                        description: end of the range (use numberfrom if missing)
+                        type: string
+                      codedid:
+                        description: used to flag specific conditions impacting the porting process
+                        type: string
+                    required:
+                      - numberfrom
+                    additionalProperties: false
+                orderid:
+                  type: string
+                  description: ZSmart product order id
+              required:
+                - recipientid
+                - donorid
+                - ranges
+                - orderid
+              additionalProperties: false
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: workflow instance id started at NPACT.
+      security:
+      - BearerAuth: []
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
