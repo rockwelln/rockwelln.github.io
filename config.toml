@@ -1,5 +1,5 @@
 baseURL = 'https://rockwelln.github.io/'
 languageCode = 'en-us'
 title = '1337'
-theme = "hugo-clarity"
+theme = "loveit"
 

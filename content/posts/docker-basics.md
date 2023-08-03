@@ -17,7 +17,7 @@ This is my reference article to introduce docker basic concepts.
 Modern architectures usually involve existing services to handle some responsibilities in the service we want to offer.<br>
 We want to use those services because we don't have time to reinvent the wheel and they are robust, cheap/free, standard, ... name it (e.g nginx, haproxy, postgresql, redis, python, etc...).<br>
 
-IT architecture is a moving target full of people with strong opinions. Each of these tools has it's own list of requirements and (even if the team behind them is making a great job to ensure compatibility) there is no guarantee they will work properly together across versions, in the long run. <br>
+IT architecture is a moving target full of people with strong opinions. Each of these tools has it's own community and list of requirements and (even if the team behind them is making a great job to ensure compatibility) there is no guarantee they will work properly together across versions, in the long run. <br>
 
 ### Typical dependency issue
 
@@ -35,7 +35,10 @@ But today Centos is deprecated, only bug fixes and security patches are provided
 ### A solution attempt
 
 We, as software makers, don't want to deal with those recurring problems.<br>
-We want to have isolation of service dependencies and abstraction of the operating system.<br>
+We want to have isolation of service dependencies and abstraction of the operating system.<br><br>
+
+Docker brings software isolation. It's not the only one (virtual machines) or the first to use containers (LXC, LXD, etc.)
+
 
 
 ## Living in a limited environment
@@ -54,13 +57,13 @@ But because the container is light weight, usually there is no editor (e.g vi, v
 Sed is a very common program in the Linux world and is present in most distro and images (even the slim ones).<br>
 Usually scary for beginners using the command line, you can use it as such:
 
-```bash
+```bash {linenos=table}
 sed 's/<old string>/<new string>/g' <text_file> > <new_file>
 ```
 
 For instance
 
-```bash {hl_lines=[7,8]}
+```bash {linenos=table}
 # replace the host ip address in some config file
 sed 's/host=127.0.0.1/host=1.2.3.4/g' config.yml > newConfig.yml
     
@@ -76,25 +79,3 @@ mv -v newConfig.yml config.yml
 
 When you need to patch a folder or binaries, `sed` will be no help.<br>
 
-```go {linenos=table,hl_lines=[8,"15-17"],linenostart=199}
-// GetTitleFunc returns a func that can be used to transform a string to
-// title case.
-//
-// The supported styles are
-//
-// - "Go" (strings.Title)
-// - "AP" (see https://www.apstylebook.com/)
-// - "Chicago" (see https://www.chicagomanualofstyle.org/home.html)
-//
-// If an unknown or empty style is provided, AP style is what you get.
-func GetTitleFunc(style string) func(s string) string {
-  switch strings.ToLower(style) {
-  case "go":
-    return strings.Title
-  case "chicago":
-    return transform.NewTitleConverter(transform.ChicagoStyle)
-  default:
-    return transform.NewTitleConverter(transform.APStyle)
-  }
-}
-```
