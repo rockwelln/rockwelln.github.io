@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Add custom routes to OpenVPN - 1337</title><meta name="Description" content="This is my cool site"><meta property="og:title" content="Add custom routes to OpenVPN" />
+<meta property="og:description" content="When you connect to a VPN, you usually want to access some resources on the VPN network (e.g. a database, a web server, etc&hellip;).
+But you don&rsquo;t necessarily want to route all your traffic through the VPN (e.g. you don&rsquo;t want to use the VPN to access google.com).
+So a proper VPN configuration only routes your company&rsquo;s network through the VPN.
+But sometimes a public resource is only accessible if your originating IP is in the VPN network." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rockwelln.github.io/posts/openvpn-custom-routes/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-03T15:05:15+02:00" />
+<meta property="article:modified_time" content="2023-08-03T15:05:15+02:00" /><meta property="og:site_name" content="My cool site" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Add custom routes to OpenVPN"/>
+<meta name="twitter:description" content="When you connect to a VPN, you usually want to access some resources on the VPN network (e.g. a database, a web server, etc&hellip;).
+But you don&rsquo;t necessarily want to route all your traffic through the VPN (e.g. you don&rsquo;t want to use the VPN to access google.com).
+So a proper VPN configuration only routes your company&rsquo;s network through the VPN.
+But sometimes a public resource is only accessible if your originating IP is in the VPN network."/>
+<meta name="application-name" content="My cool site">
+<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://rockwelln.github.io/posts/openvpn-custom-routes/" /><link rel="prev" href="https://rockwelln.github.io/posts/docker-basics/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Add custom routes to OpenVPN",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/rockwelln.github.io\/posts\/openvpn-custom-routes\/"
+        },"genre": "posts","wordcount":  279 ,
+        "url": "https:\/\/rockwelln.github.io\/posts\/openvpn-custom-routes\/","datePublished": "2023-08-03T15:05:15+02:00","dateModified": "2023-08-03T15:05:15+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Author"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="1337">My cool site</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="1337">My cool site</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Add custom routes to OpenVPN</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Author</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-08-03">2023-08-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;279 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>When you connect to a VPN, you usually want to access some resources on the VPN network (e.g. a database, a web server, etc&hellip;).</p>
+<p>But you don&rsquo;t necessarily want to route all your traffic through the VPN (e.g. you don&rsquo;t want to use the VPN to access google.com).</p>
+<p>So a proper VPN configuration only routes your company&rsquo;s network through the VPN.</p>
+<p>But sometimes a public resource is only accessible if your originating IP is in the VPN network.</p>
+<p>In this case, you need to add a custom route to the VPN network.</p>
+<p>To manually add a custom route, you can use the <code>route</code> command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># on MacOS</span>
+</span></span><span style="display:flex;"><span>sudo route -n add -net &lt;public-ip&gt; &lt;gateway&gt;
+</span></span></code></pre></div><p>Ok, but that would be annoying to do it manually each time you connect to the VPN.</p>
+<p>So you can use the <code>up</code> and <code>down</code> options of the OpenVPN client configuration to run a script when the VPN is connected or disconnected.</p>
+<p>Personally I use Tunnelblick on MacOS, so I can add a script in the <code>~/Library/Application Support/Tunnelblick/Configurations/&lt;config-name&gt;.tblk/Contents/Resources</code> folder.</p>
+<p>The script will be called <code>up.sh</code> and will contain the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># add custom routes to VPN network</span>
+</span></span><span style="display:flex;"><span>/sbin/route -n add -net &lt;public-net&gt;/24 -interface $1
+</span></span></code></pre></div><p>The <code>$1</code> variable is the name of the network interface created by Tunnelblick.</p>
+<p>Mind to secure the script and make it executable:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chmod <span style="color:#ae81ff">700</span> up.sh
+</span></span><span style="display:flex;"><span>chown root:wheel up.sh
+</span></span></code></pre></div><p>Now, in the OpenVPN configuration, you can add the following at the end:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>up up.sh
+</span></span></code></pre></div><p>And that&rsquo;s it, you can now connect to your VPN and access the public resource.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://blog.remibergsma.com/2012/03/04/howto-quickly-add-a-route-in-mac-osx/" target="_blank" rel="noopener noreffer ">Add a route on MacOS X</a></li>
+<li><a href="https://support.justaddpower.com/kb/article/320-adding-a-static-route-to-macos/" target="_blank" rel="noopener noreffer ">Add a static route</a></li>
+<li><a href="https://serverfault.com/a/996743" target="_blank" rel="noopener noreffer ">SO-How to automatically add a local route after OpenVPN start?</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-08-03</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://rockwelln.github.io/posts/openvpn-custom-routes/" data-title="Add custom routes to OpenVPN"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://rockwelln.github.io/posts/openvpn-custom-routes/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://rockwelln.github.io/posts/openvpn-custom-routes/" data-title="Add custom routes to OpenVPN"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://rockwelln.github.io/posts/openvpn-custom-routes/" data-title="Add custom routes to OpenVPN"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://rockwelln.github.io/posts/openvpn-custom-routes/" data-title="Add custom routes to OpenVPN"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/docker-basics/" class="prev" rel="prev" title="Docker Basics"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Docker Basics</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.116.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

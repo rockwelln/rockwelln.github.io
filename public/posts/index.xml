@@ -1,2 +1,28 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 1337</title><link>https://rockwelln.github.io/posts/</link><description>Recent content in Posts on 1337</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 19 May 2022 10:03:56 +0200</lastBuildDate><atom:link href="https://rockwelln.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Basics</title><link>https://rockwelln.github.io/posts/docker-basics/</link><pubDate>Thu, 19 May 2022 10:03:56 +0200</pubDate><guid>https://rockwelln.github.io/posts/docker-basics/</guid><description>This is my reference article to introduce docker basic concepts.
-Agenda Overview Why and What? Why do you need docker? Modern architectures usually involve existing services to handle some responsibilities in the service we want to offer.We want to use those services because we don&amp;rsquo;t have time to reinvent the wheel and they are robust, cheap/free, standard, &amp;hellip; name it (e.g nginx, haproxy, postgresql, redis, python, etc&amp;hellip;).</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>All Posts - 1337</title>
+        <link>https://rockwelln.github.io/posts/</link>
+        <description>All Posts | 1337</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 03 Aug 2023 15:05:15 &#43;0200</lastBuildDate><atom:link href="https://rockwelln.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Add custom routes to OpenVPN</title>
+    <link>https://rockwelln.github.io/posts/openvpn-custom-routes/</link>
+    <pubDate>Thu, 03 Aug 2023 15:05:15 &#43;0200</pubDate>
+    <author>Author</author>
+    <guid>https://rockwelln.github.io/posts/openvpn-custom-routes/</guid>
+    <description><![CDATA[When you connect to a VPN, you usually want to access some resources on the VPN network (e.g. a database, a web server, etc&hellip;).
+But you don&rsquo;t necessarily want to route all your traffic through the VPN (e.g. you don&rsquo;t want to use the VPN to access google.com).
+So a proper VPN configuration only routes your company&rsquo;s network through the VPN.
+But sometimes a public resource is only accessible if your originating IP is in the VPN network.]]></description>
+</item>
+<item>
+    <title>Docker Basics</title>
+    <link>https://rockwelln.github.io/posts/docker-basics/</link>
+    <pubDate>Thu, 19 May 2022 10:03:56 &#43;0200</pubDate>
+    <author>Author</author>
+    <guid>https://rockwelln.github.io/posts/docker-basics/</guid>
+    <description><![CDATA[This is my reference article to introduce docker basic concepts.
+Agenda Overview Why and What? Why do you need docker? Modern architectures usually involve existing services to handle some responsibilities in the service we want to offer. We want to use those services because we don&rsquo;t have time to reinvent the wheel and they are robust, cheap/free, standard, &hellip; name it (e.g nginx, haproxy, postgresql, redis, python, etc&hellip;).
+IT architecture is a moving target full of people with strong opinions.]]></description>
+</item>
+</channel>
+</rss>
